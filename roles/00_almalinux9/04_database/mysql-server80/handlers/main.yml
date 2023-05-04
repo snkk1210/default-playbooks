@@ -1,0 +1,8 @@
+---
+# 再起動
+- name: restart_mysqld_handler
+  service:
+    name: mysqld
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

@@ -1,0 +1,38 @@
+ex_user:
+  - { customer: 'ease_ops' ,customer_pass: 'vagrantvagrant' }
+
+ServerAdmin: info@fingerease.work
+domain_name:
+   - { domain: 'fingerease.work' ,customer: 'ease_ops' }
+   - { domain: 'vagrant.com' ,customer: 'vagrant' }
+custom_domain:
+   - { domain: 'ease.fingerease' ,customer: 'ease_ops' , document_root: '/home/ease_ops/public_html' }
+webuser: apache
+#webuser: nginx
+
+php_var: 8.2
+php_modules:
+  - "php"
+  - "php-fpm"
+  - "php-cli"
+  - "php-devel"
+  - "php-common"
+  - "php-json"
+  - "php-soap"
+  - "php-xml"
+  - "php-mbstring"
+  - "php-mcrypt"
+  - "php-pdo"
+  - "php-gd"
+  - "php-process"
+  - "php-intl"
+  - "php-pecl-apcu"
+  - "php-mysql"
+  - "php-opcache"
+
+db_passwd: OP:Ts7ajsu98J
+innodb_buffer_pool_size: 256M
+key_buffer_size: 4M
+
+zabbix_password: -xOP:T;@as7u@s;sl~@sl
+zabbix_server_ip: 8.8.8.8

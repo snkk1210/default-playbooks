@@ -1,0 +1,10 @@
+---
+# tasks file for mysql-client
+- name: install mysql80 repository
+  yum:
+    name: https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+    state: present
+    disable_gpg_check: yes
+
+- name: install mysql
+  shell: "dnf install --disablerepo=appstream mysql-community-client -y"

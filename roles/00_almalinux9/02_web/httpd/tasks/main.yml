@@ -1,0 +1,50 @@
+---
+# Apache インストール
+- name: install apache
+  yum:
+    name:
+      - httpd
+    state: present
+
+- name: modify defconf
+  blockinfile:
+    dest: /etc/httpd/conf/httpd.conf
+    insertafter: '^#ServerName www.example.com:80$'
+    content: 'ServerName {{ inventory_hostname }}:80'
+
+- name: change parameter
+  template:
+    src: ../templates/{{ item }}
+    dest: /etc/httpd/conf.d/
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - mpm.conf.disable
+    - security.conf
+
+- name: mkdir /etc/systemd/system/httpd.service.d/
+  file:
+    path: "/etc/systemd/system/httpd.service.d"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: change file descriptor limit for httpd
+  template:
+    src: "../templates/limits.conf"
+    dest: "/etc/systemd/system/httpd.service.d/"
+    owner: root
+    group: root
+    mode: 0644
+
+- include_tasks: security.yml
+- include_tasks: vhost.yml
+
+- name: restart httpd
+  systemd:
+    name: httpd
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
