@@ -18,8 +18,8 @@ rotate_num_web に Nginx のログ保持期間を定義
 ※ 変数を設定しなければ、デフォルト (下記) の設定になります。
 
 ```
-interval_sys: daily
-rotate_num_sys: 90
+interval_web: daily
+rotate_num_web: 90
 ```
 
 Author Information
