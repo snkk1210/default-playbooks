@@ -1,0 +1,47 @@
+---
+# tasks file for logs/mysql-slow
+- name: install python3-PyMySQL
+  yum:
+    name: python3-PyMySQL
+    state: present
+
+- name: create mysql logs user
+  mysql_user:
+    name: logs
+    host: localhost
+    password: "{{ mysqllogs_dbpass | default('dwRW2unMF&T', true) }}"
+    priv: "*.*:reload"
+    state: present
+    login_user: root
+    login_password: "{{ db_passwd }}"
+  ignore_errors: yes
+
+- name: create dir
+  file:
+    path: /var/log/mysql
+    state: directory
+    owner: mysql
+    group: mysql
+    mode: 0755
+
+- name: mysql_config_editor print --login-path=llog
+  shell: mysql_config_editor print --login-path=llog
+  register: llog
+  changed_when: False
+
+- name: mysql_config_editor set -G llog -h localhost -u logs -p
+  expect:
+    command: mysql_config_editor set -G llog -h localhost -u logs -p
+    responses:
+      "Enter password:": "{{ mysqllogs_dbpass | default('dwRW2unMF&T', true) }}"
+  when: not 'llog' in llog.stdout
+
+- name: put mysql-slow logrotate file
+  template:
+    src: ../templates/{{ item }}
+    dest: /etc/logrotate.d/
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - mysql-log
