@@ -39,9 +39,9 @@
     daemon_reload: yes
     enabled: yes
 
-- name: configure dnf exclude for zabbix updates
+- name: configure epel exclude for zabbix
   lineinfile:
-    path: /etc/dnf/dnf.conf
-    regex: '^exclude=(.*)'
-    line: 'exclude=\1 zabbix*'
-    state: present
+    path: /etc/yum.repos.d/epel.repo
+    regexp: '^excludepkgs='
+    line: 'excludepkgs=zabbix*'
+    insertafter: '\[epel\]'
