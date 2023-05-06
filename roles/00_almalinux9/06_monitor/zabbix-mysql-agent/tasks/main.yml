@@ -9,11 +9,11 @@
   mysql_user:
     name: zabbix
     host: localhost
-    password: "{{ zabbix_dbpass | default('dwRW2unMF&T', true) }}"
+    password: "{{ mysql_zabbix_password | default('dwRW2unMF&T', true) }}"
     priv: "*.*:process"
     state: present
     login_user: root
-    login_password: "{{ db_passwd }}"
+    login_password: "{{ mysql_root_password }}"
   ignore_errors: yes
 
 - name: create dir

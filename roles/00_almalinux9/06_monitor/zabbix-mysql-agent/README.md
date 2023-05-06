@@ -10,14 +10,14 @@ Zabbix 用の MySQL ユーザを作成する Playbookです。
 
 ## 変数
 
-zabbix_dbpass に作成する zabbix ユーザのパスワードを定義  
-db_passwd に MySQL の root ユーザのパスワードを定義
+mysql_zabbix_password に作成する zabbix ユーザのパスワードを定義  
+mysql_root_password に MySQL の root ユーザのパスワードを定義
 
 ```
 ---
 # vars file for zabbix-mysql-agent
-zabbix_dbpass:
-db_passwd: 
+mysql_zabbix_password:
+mysql_root_password: 
 ```
 
 Author Information

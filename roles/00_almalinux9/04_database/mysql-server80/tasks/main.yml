@@ -105,5 +105,5 @@
   expect:
     command: mysql_config_editor set -G lroot -h localhost -u root -p
     responses:
-      "Enter password:": "{{ db_passwd }}"
+      "Enter password:": "{{ mysql_root_password }}"
   when: not 'lroot' in lroot.stdout

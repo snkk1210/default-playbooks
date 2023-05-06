@@ -30,9 +30,11 @@ php_modules:
   - "php-mysql"
   - "php-opcache"
 
-db_passwd: OP:Ts7ajsu98J
+mysql_root_password: OP:Ts7ajsu98J
 innodb_buffer_pool_size: 256M
 key_buffer_size: 4M
 
-zabbix_password: -xOP:T;@as7u@s;sl~@sl
+mysql_logs_password: dwRW2unMF&T
+
+mysql_zabbix_password: dwRW2unMF&T
 zabbix_server_ip: 8.8.8.8

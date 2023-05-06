@@ -9,11 +9,11 @@
   mysql_user:
     name: logs
     host: localhost
-    password: "{{ mysqllogs_dbpass | default('dwRW2unMF&T', true) }}"
+    password: "{{ mysql_logs_password | default('dwRW2unMF&T', true) }}"
     priv: "*.*:reload"
     state: present
     login_user: root
-    login_password: "{{ db_passwd }}"
+    login_password: "{{ mysql_root_password }}"
   ignore_errors: yes
 
 - name: create dir

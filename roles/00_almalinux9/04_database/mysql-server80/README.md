@@ -21,10 +21,10 @@ MySQL のパラメータと root ユーザのパスワードを定義して下�
 # vars file for db_backup
 innodb_buffer_pool_size: 256M
 key_buffer_size: 128M
-db_passwd: OP:Ts7ajsu98J
+mysql_root_password: OP:Ts7ajsu98J
 ```
 
-※ db_passwd に 「# (シャープ)」 の文字を含めないで下さい。  
+※ mysql_root_password に 「# (シャープ)」 の文字を含めないで下さい。  
 
 Author Information
 ------------------
