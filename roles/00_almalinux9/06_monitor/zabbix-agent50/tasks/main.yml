@@ -10,9 +10,9 @@
     name: zabbix-agent
     state: present
     enablerepo: zabbix
-    disablerepo: '*'
+    disablerepo: epel
 
-- name: modify zabbix-agent.conf
+- name: configure zabbix-agent.conf
   lineinfile:
     dest: "/etc/zabbix/zabbix_agentd.conf"
     state: present
@@ -38,3 +38,10 @@
     state: restarted
     daemon_reload: yes
     enabled: yes
+
+- name: configure dnf exclude for zabbix updates
+  lineinfile:
+    path: /etc/dnf/dnf.conf
+    regex: '^exclude=(.*)'
+    line: 'exclude=\1 zabbix*'
+    state: present
