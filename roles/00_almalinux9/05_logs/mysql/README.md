@@ -6,8 +6,8 @@ logs/mysql
 MySQL ログのローテート設定を行う Playbook です。
 
 - ログ flush ユーザ作成
-- mysql_config_editor 登録
-- error / slowlog のログローテート調整
+- /var/log/mysql 配下に認証情報を設置
+- error / slowlog のログローテート設定
 
 ## Dependencies
 

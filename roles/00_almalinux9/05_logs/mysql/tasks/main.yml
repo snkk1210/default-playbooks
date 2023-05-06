@@ -24,17 +24,13 @@
     group: mysql
     mode: 0755
 
-- name: mysql_config_editor print --login-path=llog
-  shell: mysql_config_editor print --login-path=llog
-  register: llog
-  changed_when: False
-
-- name: mysql_config_editor set -G llog -h localhost -u logs -p
-  expect:
-    command: mysql_config_editor set -G llog -h localhost -u logs -p
-    responses:
-      "Enter password:": "{{ mysqllogs_dbpass | default('dwRW2unMF&T', true) }}"
-  when: not 'llog' in llog.stdout
+- name: put my.cnf
+  template:
+    src: ../templates/.my.cnf
+    dest: /var/log/mysql/.my.cnf
+    owner: mysql
+    group: mysql
+    mode: 0644
 
 - name: put mysql-slow logrotate file
   template:
