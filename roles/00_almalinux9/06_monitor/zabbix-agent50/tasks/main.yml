@@ -40,8 +40,9 @@
     enabled: yes
 
 - name: configure epel exclude for zabbix
-  lineinfile:
-    path: /etc/yum.repos.d/epel.repo
-    regexp: '^excludepkgs='
-    line: 'excludepkgs=zabbix*'
-    insertafter: '\[epel\]'
+  ini_file:
+    dest: /etc/yum.repos.d/epel.repo
+    state: present
+    section: epel
+    option: excludepkgs
+    value: 'zabbix*'
