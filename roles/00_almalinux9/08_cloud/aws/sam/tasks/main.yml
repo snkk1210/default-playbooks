@@ -11,7 +11,7 @@
     name: "*"
     state: latest
 
-- name: dnf install wget unzip epel-release
+- name: dnf install wget unzip
   dnf:
     name:
       - wget
