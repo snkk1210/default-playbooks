@@ -3,7 +3,7 @@ sam
 
 ## これは何？
 
-sam を導入する Playbook です。
+SAM を導入する Playbook です。
 
 - SAM 導入
 - Docker 導入
