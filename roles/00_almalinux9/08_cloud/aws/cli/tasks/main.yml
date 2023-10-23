@@ -1,0 +1,26 @@
+---
+- name: dnf install wget unzip
+  dnf:
+    name:
+      - wget
+      - unzip
+    state: present
+
+- name: check aws command exist
+  stat:
+    path: /usr/local/bin/aws
+  register: aws_command
+  ignore_errors: yes
+
+- name: wget aws installer
+  unarchive:
+    src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /usr/local/src
+    remote_src: yes
+  when: not aws_command.stat.exists
+
+- name: aws install
+  shell: ./aws/install
+  args:
+    chdir: /usr/local/src
+  when: not aws_command.stat.exists
