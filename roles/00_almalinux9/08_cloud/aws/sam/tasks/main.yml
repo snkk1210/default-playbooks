@@ -1,0 +1,72 @@
+---
+- name: dnf groupinstall "Development tools"
+  dnf:
+    name: 
+      - "@Development tools"
+      - epel-release
+    state: present
+
+- name: dnf update
+  dnf:
+    name: "*"
+    state: latest
+
+- name: dnf install wget unzip epel-release
+  dnf:
+    name:
+      - wget
+      - unzip
+    state: present
+
+- name: check docker command exist
+  stat:
+    path: /bin/docker
+  register: docker_command
+  ignore_errors: yes
+
+- name: install docker repo
+  shell: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: not docker_command.stat.exists
+
+- name: install docker
+  dnf:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+
+- name: start docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: install docker-compose
+  shell: curl -SL https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose && chmod 755 /usr/local/bin/docker-compose
+
+- name: mkdir /usr/local/src/sam-installation
+  file:
+    path: /usr/local/src/sam-installation
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: check sam command exist
+  stat:
+    path: /usr/local/bin/sam
+  register: sam_command
+  ignore_errors: yes
+
+- name: wget sam installer
+  unarchive:
+    src: https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
+    dest: /usr/local/src/sam-installation
+    remote_src: yes
+  when: not sam_command.stat.exists
+
+- name: sam install
+  shell: ./sam-installation/install
+  args:
+    chdir: /usr/local/src
+  when: not sam_command.stat.exists
