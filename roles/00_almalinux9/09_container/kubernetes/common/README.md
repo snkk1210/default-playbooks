@@ -18,9 +18,14 @@ none
 Commands after provisioning for control plane
 ```
 kubeadm init --pod-network-cidr=xxx.xxx.xxx.xxx/xx
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/custom-resources.yaml
+
 export KUBECONFIG=/etc/kubernetes/admin.conf
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
 ```
 
 Author Information
