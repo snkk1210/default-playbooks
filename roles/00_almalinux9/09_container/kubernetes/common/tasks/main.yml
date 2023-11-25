@@ -34,11 +34,20 @@
       - docker-compose-plugin
       - iproute-tc
 
+- name: deploy daemon.json file
+  template:
+    src: ../templates/daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+
 - name: start docker
   systemd:
     name: docker
     state: started
     enabled: yes
+    daemon_reload: true
 
 - name: deploy kubernetes.repo file
   template:
