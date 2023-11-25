@@ -27,6 +27,12 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/custom-resources.yaml
 ```
 
+If the process comes to a halt
+```
+find /etc/kubernetes -type f | xargs sed -i s/xxx.xxx.xxx.xxx/[correct IP address]/g
+```
+
+
 Author Information
 ------------------
 
