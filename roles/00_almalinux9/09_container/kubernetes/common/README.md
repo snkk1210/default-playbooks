@@ -32,6 +32,16 @@ If the process comes to a halt
 find /etc/kubernetes -type f | xargs sed -i s/xxx.xxx.xxx.xxx/[correct IP address]/g
 ```
 
+Renew certs
+```
+kubeadm certs renew all
+```
+
+Specify IP Address
+```
+rm /etc/kubernetes/pki/apiserver.* -f
+kubeadm init phase certs apiserver --apiserver-cert-extra-sans xxx.xxx.xxx.xxx --apiserver-cert-extra-sans xxx.xxx.xxx.xxx --apiserver-cert-extra-sans localhost
+```
 
 Author Information
 ------------------
