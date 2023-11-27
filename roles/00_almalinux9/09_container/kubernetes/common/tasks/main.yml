@@ -52,6 +52,7 @@
   dnf:
     name:
       - containerd.io
+      - iproute-tc
 
 - name: containerd config default | tee /etc/containerd/config.toml >/dev/null 2>&1
   shell: containerd config default | tee /etc/containerd/config.toml >/dev/null 2>&1
