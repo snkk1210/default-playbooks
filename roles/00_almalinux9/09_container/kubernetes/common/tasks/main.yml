@@ -8,98 +8,14 @@
     - { name: 'net.ipv6.conf.all.disable_ipv6',value: '1' }
     - { name: 'net.ipv6.conf.default.disable_ipv6',value: '1' }
 
-- name: remove docker package
-  dnf:
-    name: 
-      - docker
-      - docker-client
-      - docker-client-latest
-      - docker-common
-      - docker-latest
-      - docker-latest-logrotate
-      - docker-logrotate
-      - docker-engine
-    state: removed
+- name: disable ipv6 for postfix
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^inet_protocols'
+    line: 'inet_protocols = ipv4'
+    backup: yes
 
-- name: add docker repository
-  shell: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-
-- name: install docker package
-  dnf:
-    name:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-      - docker-buildx-plugin
-      - docker-compose-plugin
-      - iproute-tc
-
-- name: deploy daemon.json file
-  template:
-    src: ../templates/daemon.json
-    dest: /etc/docker/daemon.json
-    owner: root
-    group: root
-    mode: 0644
-
-- name: start docker
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
-    daemon_reload: true
-
-- name: deploy kubernetes.repo file
-  template:
-    src: ../templates/kubernetes.repo
-    dest: /etc/yum.repos.d/kubernetes.repo
-    owner: root
-    group: root
-    mode: 0644
-
-- name: install docker package
-  dnf:
-    name:
-      - kubelet
-      - kubeadm
-      - kubectl
-    disable_excludes: kubernetes
-
-- name: mkdir /var/lib/kubelet
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-  with_items:
-    - "/var/lib/kubelet"
-    - "/etc/systemd/system/kubelet.service.d"
-
-- name: deploy config.yaml file
-  template:
-    src: ../templates/config.yaml
-    dest: /var/lib/kubelet/config.yaml
-    owner: root
-    group: root
-    mode: 0644
-
-- name: deploy 20-extra-args.conf file
-  template:
-    src: ../templates/20-extra-args.conf
-    dest: /etc/systemd/system/kubelet.service.d/20-extra-args.conf
-    owner: root
-    group: root
-    mode: 0644
-
-- name: start kubelet
-  systemd:
-    name: kubelet
-    state: started
-    daemon_reload: yes
-    enabled: yes
-
-- name: deploy containerd.conf file
+- name: deploy containerd.conf file for kernel modules
   template:
     src: ../templates/containerd.conf
     dest: /etc/modules-load.d/containerd.conf
@@ -121,17 +37,64 @@
 - name: sysctl --system
   shell: sysctl --system
 
-- name: sed -i 's/disabled_plugins = \["cri"\]/disabled_plugins = \[""\]/' /etc/containerd/config.toml
+- name: remove docker package
+  dnf:
+    name: 
+      - docker
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-engine
+    state: removed
+
+- name: add docker repository
+  shell: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: install docker package
+  dnf:
+    name:
+      - containerd.io
+
+- name: containerd config default | tee /etc/containerd/config.toml >/dev/null 2>&1
+  shell: containerd config default | tee /etc/containerd/config.toml >/dev/null 2>&1
+
+- name: sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/' /etc/containerd/config.toml
   lineinfile:
     path: /etc/containerd/config.toml
-    regexp: '^disabled_plugins = \["cri"\]'
-    line: 'disabled_plugins = [""]'
+    regexp: '^SystemdCgroup'
+    line: 'SystemdCgroup = true'
     backup: yes
 
 - name: start containerd
   systemd:
     name: containerd
+    state: restarted
+    enabled: yes
+
+- name: deploy kubernetes.repo file
+  template:
+    src: ../templates/kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install kube package
+  dnf:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    disable_excludes: kubernetes
+
+- name: start kubelet
+  systemd:
+    name: kubelet
     state: started
+    daemon_reload: yes
     enabled: yes
 
 - name: restart server
