@@ -7,7 +7,7 @@ kubernetes を導入する Playbook です。
 
 ## Dependencies
 
-- common
+none
 
 ## 変数
 
