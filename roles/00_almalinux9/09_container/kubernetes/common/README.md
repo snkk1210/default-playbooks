@@ -3,7 +3,7 @@ kubernetes/common
 
 ## What is this ?
 
-kubernetes を導入する Playbook です。
+This is a Playbook to introduce kubernetes.
 
 ## Dependencies
 
