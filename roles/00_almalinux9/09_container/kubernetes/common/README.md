@@ -17,13 +17,19 @@ none
 
 Commands after provisioning for control plane
 ```
-sed -i s/KUBELET_EXTRA_ARGS=/KUBELET_EXTRA_ARGS=--node-ip=xxx.xxx.xxx.xxx/g /etc/sysconfig/kubelet
+kubeadm init --pod-network-cidr=xxx.xxx.xxx.xxx/xx --control-plane-endpoint=xxx.xxx.xxx.xxx --apiserver-advertise-address=xxx.xxx.xxx.xxx --service-cidr=xxx.xxx.xxx.xxx/xx
 
-kubeadm init --pod-network-cidr=xxx.xxx.xxx.xxx/xx --control-plane-endpoint=xxx.xxx.xxx.xxx --apiserver-advertise-address=xxx.xxx.xxx.xxx
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 export KUBECONFIG=/etc/kubernetes/admin.conf
+```
+
+Install Calico
+```
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/tigera-operator.yaml
+wget https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/custom-resources.yaml
+kubectl create -f custom-resources.yaml
 ```
 
 Renew certificate
