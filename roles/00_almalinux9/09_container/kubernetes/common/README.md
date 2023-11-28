@@ -14,8 +14,8 @@ none
 none
 
 ## Memo
-
-Commands after provisioning for control plane
+### Initialization ( Commands after provisioning )
+ Initialization for control plane
 ```
 kubeadm init --pod-network-cidr=xxx.xxx.xxx.xxx/xx --control-plane-endpoint=xxx.xxx.xxx.xxx --apiserver-advertise-address=xxx.xxx.xxx.xxx --service-cidr=xxx.xxx.xxx.xxx/xx
 
@@ -43,7 +43,7 @@ wget https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/cu
 sed -i 's/cidr: 192.168.0.0\/16/cidr: xxx.xxx.xxx.xxx\/xx/g' ./custom-resources.yaml
 kubectl create -f custom-resources.yaml
 ```
-
+### Other
 Renew certificate
 ```
 kubeadm certs renew all
