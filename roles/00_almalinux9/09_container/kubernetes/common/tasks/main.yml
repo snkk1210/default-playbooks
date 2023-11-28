@@ -31,8 +31,13 @@
     group: root
     mode: 0644
 
-- name: modprobe overlay && modprobe br_netfilter
-  shell: modprobe overlay && modprobe br_netfilter
+- name: modprobe overlay
+  community.general.modprobe:
+    name: overlay
+
+- name: modprobe br_netfilter
+  community.general.modprobe:
+    name: br_netfilter
 
 - name: deploy k8s.conf file
   template:
@@ -60,8 +65,8 @@
 - name: sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/' /etc/containerd/config.toml
   lineinfile:
     path: /etc/containerd/config.toml
-    regexp: '^SystemdCgroup'
-    line: 'SystemdCgroup = true'
+    regexp: 'SystemdCgroup = false'
+    line: '            SystemdCgroup = true'
     backup: yes
 
 - name: start containerd
