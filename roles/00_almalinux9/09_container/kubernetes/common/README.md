@@ -1,7 +1,7 @@
 kubernetes/common
 =========
 
-## これは何？
+## What is this ?
 
 kubernetes を導入する Playbook です。
 
@@ -9,7 +9,7 @@ kubernetes を導入する Playbook です。
 
 none
 
-## 変数
+## variable
 
 none
 
