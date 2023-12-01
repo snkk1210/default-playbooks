@@ -60,11 +60,6 @@ Reset kube setup
 kubeadm reset
 ```
 
-Rewrite IP address directly
-```
-find /etc/kubernetes -type f | xargs sed -i s/xxx.xxx.xxx.xxx/[correct IP address]/g
-```
-
 Author Information
 ------------------
 
